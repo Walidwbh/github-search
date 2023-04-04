@@ -46,13 +46,20 @@ form button:hover {
 /* from MEDIA QUERIES */
 @media (max-width: 768px) {
   form {
-      gap: 0px;
+      gap: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+  }
+  form img {
+    display: none;
   }
   form input {
       font-size: 16px;
+      width: 100%;
   }
   form button {
       font-size: 0.8rem;
+      align-self: center;
   }
 }
 /* end header and form setion */
@@ -127,6 +134,9 @@ form button:hover {
   justify-content: space-between;
   gap: 20px;
   color: var(--txt-color);
+}
+.links .link:first-child > img {
+      margin-right: 6px;
 }
 .links .link .link-content {
   flex: 1;
