@@ -2,55 +2,71 @@
   <div class="header">
       <h2>devfinder</h2>
   </div>
-  <form>
+  <form [formGroup]="myForm" (ngSubmit)="getUser()">
       <img src="assets/icon-search.svg">
-      <input type="text" name="search" id="search" placeholder="Search Github username...">
-      <div class="error"></div>
-      <button type="submit">Search</button>
+      <input type="text" name="search" id="search" placeholder="Search Github username..." formControlName="userName">
+      <div class="error" *ngIf="myForm.controls['userName'].touched">
+        <div *ngIf="myForm.controls['userName'].errors?.['required']">Please add a user...</div>
+        <div *ngIf="error">{{error}}</div>
+
+      </div>
+      <button type="submit" [disabled]="!myForm.valid">Search</button>
   </form>
   <!-- begin content section -->
-  <div class="content">
-      <img class="avatar" src="https://avatars.githubusercontent.com/u/93353066?v=4" alt="">
+  <div class="content" *ngIf="userData$ | async; let data">
+      <img class="avatar" [src]="data.avatar_url">
       <div class="content-description">
           <div class="user-top">
-                  <img class="avatar" src="https://avatars.githubusercontent.com/u/93353066?v=4" alt="">
-                  <h2 class="login">Walidwbh</h2>
-                  <div class="joined">Joined <span>28 Oct 2021</span></div>
-                  <div class="name">@Walidwbh</div>
+                  <img class="avatar" [src]="data.avatar_url">
+                  <h2 class="name" *ngIf="data.name;then name else login"></h2>
+                  <ng-template #name><h2 class="name">{{data.name}}</h2></ng-template>
+                  <ng-template #login><h2 class="name">{{data.login}}</h2></ng-template>
+                  <div class="joined">Joined <span>{{data.created_at | date:'mediumDate'}}</span></div>
+                  <div class="login">@{{data.login}}</div>
           </div>
-          <div class="bio not-available">
-              this profile has no bio
+          <div *ngIf="data.bio; then bio else notbio">
           </div>
+          <ng-template #bio><div class="bio">{{data.bio}}</div></ng-template>
+          <ng-template #notbio><div class="bio not-available">This profile has no bio.</div></ng-template>
           <div class="stats">
               <div class="stat">
                   <div class="stat-title">Repos</div>
-                  <div class="stat-content repos-count">8</div>
+                  <div class="stat-content repos-count">{{data.public_repos}}</div>
               </div>
               <div class="stat">
                   <div class="stat-title">Followers</div>
-                  <div class="stat-content followers-count">3938</div>
+                  <div class="stat-content followers-count">{{data.followers}}</div>
               </div>
               <div class="stat">
                   <div class="stat-title">Following</div>
-                  <div class="stat-content following-count">9</div>
+                  <div class="stat-content following-count">{{data.following}}</div>
               </div>
           </div>
           <div class="links">
               <div class="link">
                   <img src="assets/icon-location.svg">
-                  <div class="link-content location not-available">Not Available</div>
+                  <div *ngIf="data.location; then location else notlocation"></div>
+                  <!-- <div class="link-content location not-available">Not Available</div> -->
+                  <ng-template #location><div class="link-content location">{{data.location}}</div></ng-template>
+                  <ng-template #notlocation><div class="link-content location not-available">Not Available</div></ng-template>
               </div>
               <div class="link">
                   <img src="assets/icon-website.svg">
-                  <div class="link-content website not-available">Not Available</div>
+                  <div *ngIf="data.blog; then website else notwebsite"></div>
+                  <ng-template #website><div class="link-content website">{{data.blog}}</div></ng-template>
+                  <ng-template #notwebsite><div class="link-content website not-available">Not Available</div></ng-template>
               </div>
               <div class="link">
                   <img src="assets/icon-twitter.svg">
-                  <div class="link-content twitter not-available">Not Available</div>
+                  <div *ngIf="data.twitter_username; then twitter else nottwitter"></div>
+                  <ng-template #twitter><div class="link-content twitter">{{data.twitter_username}}</div></ng-template>
+                  <ng-template #nottwitter><div class="link-content twitter not-available">Not Available</div></ng-template>
               </div>
               <div class="link">
                   <img src="assets/icon-company.svg">
-                  <div class="link-content company not-available">Not Available</div>
+                  <div *ngIf="data.company; then company else notcompany"></div>
+                  <ng-template #company><div class="link-content company">{{data.company}}</div></ng-template>
+                  <ng-template #notcompany><div class="link-content company not-available">Not Available</div></ng-template>
               </div>
           </div>
       </div>

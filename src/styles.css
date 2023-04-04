@@ -14,10 +14,6 @@
   font-family: 'Space Mono', monospace;
 }
 body {
-  height: 100vh;
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
   background-color: var(--bg);
 }
 /* begin global component */
@@ -26,9 +22,9 @@ body {
   pointer-events: none;
 }
 .container {
+  padding: 60px 0px;
   margin: 0 auto;
   max-width: 750px;
-  /* width: 100%; */
 }
 @media (max-width: 768px) {
   .container {
